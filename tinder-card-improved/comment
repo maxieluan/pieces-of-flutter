@@ -1,0 +1,13 @@
+plans:
+
+1. like Tinder: 
+    a. initialize a stack of card
+    b. each swipe move a card out of screen, not putting back, destroyed maybe
+    c. move the underlying card front.
+    d. until the stack runs out, go back to step 1
+
+2. needs to use animation on swiping. 
+    a. branch out at certain threshold
+        i. if keeps moving, animate card out of screen.
+        ii. if moving stopes before threshold, animate card back to the stack.
+    b. while at it, also move the back cards up at the same time. 
