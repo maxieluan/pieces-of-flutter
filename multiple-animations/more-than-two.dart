@@ -131,13 +131,10 @@ class _SquareAnimationScreenState extends State<SquareAnimationScreen>
                 builder: (context, child) {
                   switch(_activeAnimation) {
                     case AnimationType.bouncing:
-                      return Transform.translate(
-                        offset: Offset(0, _bouncingAnimation.value),
-                        child: Container(
-                          width: 100,
-                          height: 100,
-                          color: Colors.blue
-                        ),
+                      return Container(
+                        width: 100,
+                        height: 100,
+                        color: Colors.blue
                       );
                     case AnimationType.changingColor:
                       return Container(
