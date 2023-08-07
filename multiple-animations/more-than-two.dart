@@ -82,10 +82,6 @@ class _SquareAnimationScreenState extends State<SquareAnimationScreen>
       ..addListener(() {
         setState(() {});
       });
-
-    _bouncingController.forward();
-    _colorController.forward();
-    _sizeController.forward();
   }
 
   @override
@@ -103,13 +99,13 @@ class _SquareAnimationScreenState extends State<SquareAnimationScreen>
 
     switch (animationType) {
       case AnimationType.bouncing:
-        _bouncingController.forward();
+        _bouncingController.repeat(reverse: true);
         break;
       case AnimationType.changingColor:
-        _colorController.forward();
+        _colorController.repeat(reverse: true);
         break;
       case AnimationType.growingShrinking:
-        _sizeController.forward();
+        _sizeController.repeat(reverse: true);
         break;
     }
   }
