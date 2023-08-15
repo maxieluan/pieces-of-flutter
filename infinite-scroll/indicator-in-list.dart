@@ -64,6 +64,8 @@ class _InfiniteScrollWidgetState extends State<InfiniteScrollWidget>{
     Future.delayed(const Duration(seconds: 1), ()
     {
       if (down) {
+        bool isSingleSection = dataList.length <= itemsPerPage + 1;
+
         bool isOnlyOnePageData = (dataList.length < 2 * itemsPerPage);
 
         setState(() {
@@ -82,8 +84,18 @@ class _InfiniteScrollWidgetState extends State<InfiniteScrollWidget>{
           currentPage ++;
         });
 
-        print("max ${_scrollController.position.maxScrollExtent}");
+        if (dataList.length < 2 * itemsPerPage) {
+          print("scroll to item height");
+          _scrollController.animateTo(itemHeight.toDouble(), duration: Duration(milliseconds: 200), curve: Curves.linear);
+
         } else {
+          if (!isSingleSection) {
+            double scrollOffsetChange = _scrollController.offset -
+                itemHeight * itemsPerPage;
+            _scrollController.jumpTo(scrollOffsetChange);
+          }
+        }
+      } else {
         bool isOnlyOnePageData = (dataList.length < 2 * itemsPerPage);
 
         setState(() {
@@ -102,17 +114,8 @@ class _InfiniteScrollWidgetState extends State<InfiniteScrollWidget>{
           currentPage --;
           print("head ${head} - tail ${tail}");
         });
-      }
-
-      if (down) {
-        if (dataList.length < 2 * itemsPerPage) {
-          _scrollController.animateTo(itemHeight.toDouble(), duration: Duration(milliseconds: 200), curve: Curves.linear);
-
-        } else {
-          _scrollController.animateTo(_scrollController.position.maxScrollExtent - itemHeight, duration: Duration(milliseconds: 200), curve: Curves.linear);
-        }
-      } else {
         _scrollController.animateTo(itemHeight.toDouble(), duration: Duration(milliseconds: 200), curve: Curves.linear);
+
       }
 
       isLoading = false;
@@ -149,6 +152,9 @@ class _InfiniteScrollWidgetState extends State<InfiniteScrollWidget>{
               child: ListTile(title: Text(dataList[index])),
             );
           } else {
+            if ( dataList.length <= 1) {
+              return null;
+            }
             return SizedBox(
               height: itemHeight.toDouble(),
               child: const Center(child: CircularProgressIndicator()),
