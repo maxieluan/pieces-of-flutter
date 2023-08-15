@@ -28,7 +28,7 @@ class _InfiniteScrollWidgetState extends State<InfiniteScrollWidget>{
   int tail = 0;
   double tilesPadding = 16.0;
   bool isLoading = false;
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
@@ -38,7 +38,8 @@ class _InfiniteScrollWidgetState extends State<InfiniteScrollWidget>{
   }
 
   @override
-  void didUpdateWidget(covariant InfiniteScrollWidget oldWidget) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     // TODO: implement didUpdateWidget
     _calculateItemsPerPage();
     _loadData(true);
@@ -58,14 +59,16 @@ class _InfiniteScrollWidgetState extends State<InfiniteScrollWidget>{
       isLoading = true;
     });
 
-    Future.delayed(Duration(seconds: 1), ()
+    print("list size: ${dataList.length}");
+
+    Future.delayed(const Duration(seconds: 1), ()
     {
       if (down) {
         bool isOnlyOnePageData = (dataList.length < 2 * itemsPerPage);
 
         setState(() {
           if (!isOnlyOnePageData) {
-            dataList.removeRange(1, itemsPerPage);
+            dataList.removeRange(1, itemsPerPage + 1);
             head += itemsPerPage;
           }
           List<String> temp = [];
@@ -102,11 +105,14 @@ class _InfiniteScrollWidgetState extends State<InfiniteScrollWidget>{
       }
 
       if (down) {
-        _scrollController.animateTo(_scrollController.position.maxScrollExtent, duration: Duration(milliseconds: 200), curve: Curves.linear);
+        if (dataList.length < 2 * itemsPerPage) {
+          _scrollController.animateTo(itemHeight.toDouble(), duration: Duration(milliseconds: 200), curve: Curves.linear);
 
+        } else {
+          _scrollController.animateTo(_scrollController.position.maxScrollExtent - itemHeight, duration: Duration(milliseconds: 200), curve: Curves.linear);
+        }
       } else {
         _scrollController.animateTo(itemHeight.toDouble(), duration: Duration(milliseconds: 200), curve: Curves.linear);
-
       }
 
       isLoading = false;
@@ -115,8 +121,10 @@ class _InfiniteScrollWidgetState extends State<InfiniteScrollWidget>{
 
   void _scrollListener() {
     if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      print("Max here: ${_scrollController.position.maxScrollExtent}");
       _loadData(true);
     } else if (_scrollController.position.pixels == _scrollController.position.minScrollExtent) {
+      print("Min here: ${_scrollController.position.minScrollExtent}");
       _loadData(false);
     }
   }
@@ -126,23 +134,24 @@ class _InfiniteScrollWidgetState extends State<InfiniteScrollWidget>{
     return Scaffold(
       appBar: AppBar(title: Text("Infinite Scroll Example")),
       body: ListView.builder(
+
         controller: _scrollController,
         itemCount: dataList.length + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
-            return Container(
+            return SizedBox(
               height: itemHeight.toDouble(),
-              child: Center(child: CircularProgressIndicator()),
+              child: const Center(child: CircularProgressIndicator()),
             );
           } else if (index > 0 && index < dataList.length) {
-            return Container(
+            return SizedBox(
               height: itemHeight.toDouble(),
               child: ListTile(title: Text(dataList[index])),
             );
           } else {
-            return Container(
+            return SizedBox(
               height: itemHeight.toDouble(),
-              child: Center(child: CircularProgressIndicator()),
+              child: const Center(child: CircularProgressIndicator()),
             );
           }
         },
