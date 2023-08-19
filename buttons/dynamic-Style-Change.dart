@@ -173,17 +173,28 @@ class _FloatingButtonPageState extends State<FloatingButtonPage> with SingleTick
       return Positioned(
         right: 16.0,
         bottom: buttonOffsetAnimation.value * bottom + 16,
-        child: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: selectedStyle.backgroundColor,
-          foregroundColor: selectedStyle.foregroundColor,
-          shape: selectedStyle.shapeBorder,
-          elevation: selectedStyle.elevation,
-          splashColor: selectedStyle.splashColor,
-          hoverColor: selectedStyle.hoverColor,
-          focusColor: selectedStyle.focusColor,
-          child: Icon(iconData),
+        child: Tooltip(
+            message: 'Your Tooltip Message',
+            verticalOffset: 30,
+            preferBelow: false,
+            textStyle: TextStyle(color: Colors.white), // Customize text color
+            decoration: BoxDecoration(
+              color: Colors.blue, // Customize background color
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: FloatingActionButton(
+                onPressed: () {},
+                backgroundColor: selectedStyle.backgroundColor,
+                foregroundColor: selectedStyle.foregroundColor,
+                shape: selectedStyle.shapeBorder,
+                elevation: selectedStyle.elevation,
+                splashColor: selectedStyle.splashColor,
+                hoverColor: selectedStyle.hoverColor,
+                focusColor: selectedStyle.focusColor,
+                child: Icon(iconData)
+            )
         )
+
       );
     });
   }
