@@ -46,6 +46,7 @@ class _HomePageState extends State<HomePage> {
   bool _isSearchExpanded = false;
 
   static List<Widget> screens = <Widget>[];
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -75,7 +76,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-
+  void _openDrawer() {
+    print("tapped");
+    _scaffoldKey.currentState?.openDrawer();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +87,7 @@ class _HomePageState extends State<HomePage> {
     screens.add(SecondScreen());
 
     return Scaffold(
+      key: _scaffoldKey,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80.0),
         child: AnimatedContainer(
@@ -92,27 +97,29 @@ class _HomePageState extends State<HomePage> {
             color: Colors.white,
             borderRadius: BorderRadius.vertical(bottom: Radius.circular(16))
           ),
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: _toggleSearch,
-                child: Icon(Icons.search)
-              ),
-              AnimatedContainer(
-                duration: Duration(milliseconds: 300),
-                width: _isSearchExpanded ? MediaQuery.of(context).size.width - 72 : 0,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 16),
-                  child: TextField(
-                    focusNode: _searchFocusNode,
-                    decoration: InputDecoration(
-                      hintText: "Search",
-                      border: InputBorder.none
-                    ),
-                  ),
+          child: SafeArea(
+            child: Row(
+              children: [
+                GestureDetector(
+                    onTap: _openDrawer,
+                    child: Icon(Icons.menu)
+                ),
+                AnimatedContainer(
+                    duration: Duration(milliseconds: 300),
+                    width: _isSearchExpanded ? MediaQuery.of(context).size.width - 72 : 0,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 16),
+                      child: TextField(
+                        focusNode: _searchFocusNode,
+                        decoration: InputDecoration(
+                            hintText: "Search",
+                            border: InputBorder.none
+                        ),
+                      ),
+                    )
                 )
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ),
