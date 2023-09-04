@@ -24,7 +24,7 @@ class HomePage extends StatefulWidget{
 class FirstScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
         body: Text("First Screen")
     );
   }
@@ -34,7 +34,7 @@ class SecondScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Scaffold(
+    return const Scaffold(
         body: Text("Second Screen")
     );
   }
@@ -42,12 +42,12 @@ class SecondScreen extends StatelessWidget {
 
 class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
-  FocusNode _searchFocusNode = FocusNode();
+  final FocusNode _searchFocusNode = FocusNode();
   bool _isSearchExpanded = false;
   late OverlayEntry detectorOverlay;
 
   static List<Widget> screens = <Widget>[];
-  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -97,11 +97,11 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: _scaffoldKey,
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80.0),
+        preferredSize: const Size.fromHeight(80.0),
         child: AnimatedContainer(
-          duration: Duration(milliseconds: 100),
-          padding: _isSearchExpanded ? EdgeInsets.symmetric(horizontal: 0): EdgeInsets.symmetric(horizontal: 16.0),
-          decoration: BoxDecoration(
+          duration: const Duration(milliseconds: 100),
+          padding: _isSearchExpanded ? const EdgeInsets.symmetric(horizontal: 0): EdgeInsets.symmetric(horizontal: 16.0),
+          decoration: const BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(16))
           ),
@@ -109,53 +109,50 @@ class _HomePageState extends State<HomePage> {
             child: Row(
               children: [
                 Expanded(
-                  child: AnimatedContainer(
-                    duration: Duration(milliseconds: 300),
-                    child: Focus(
-                      onFocusChange: (hasFocus) {
-                        if (hasFocus) {
-                          setState(() {
-                            _isSearchExpanded = true;
-                          });
-                          _focusNodeListener();
-                        } else {
-                          setState(() {
-                            _isSearchExpanded = false;
-                          });
-                          _removeFocusNodeListener();
-                        }
-                      },
-                      child: Padding(
-                        padding: EdgeInsets.all(0),
-                        child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(8.0), // Adjust the corner radius as needed
-                              color: Colors.grey[200], // Adjust the background color as needed
-                            ),
-                            child: Stack(
-                              children: [
-                                TextField(
-                                  focusNode: _searchFocusNode,
-                                  decoration: InputDecoration(
-                                    hintText: 'Search',
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.fromLTRB(64.0, 12.0, 12.0, 12.0), // Adjust padding as needed
-                                    suffixIcon: !_isSearchExpanded? IconButton(
-                                      icon: Icon(Icons.clear),
-                                      onPressed: () {
-                                        // Clear the search text
-                                        _searchFocusNode.unfocus( );
-                                      }
+                  child: Focus(
+                    onFocusChange: (hasFocus) {
+                      if (hasFocus) {
+                        setState(() {
+                          _isSearchExpanded = true;
+                        });
+                        _focusNodeListener();
+                      } else {
+                        setState(() {
+                          _isSearchExpanded = false;
+                        });
+                        _removeFocusNodeListener();
+                      }
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(0),
+                      child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8.0), // Adjust the corner radius as needed
+                            color: Colors.grey[200], // Adjust the background color as needed
+                          ),
+                          child: Stack(
+                            children: [
+                              TextField(
+                                focusNode: _searchFocusNode,
+                                decoration: InputDecoration(
+                                  hintText: 'Search',
+                                  border: InputBorder.none,
+                                  contentPadding: const EdgeInsets.fromLTRB(64.0, 12.0, 12.0, 12.0), // Adjust padding as needed
+                                  suffixIcon: !_isSearchExpanded? IconButton(
+                                    icon: const Icon(Icons.clear),
+                                    onPressed: () {
+                                      // Clear the search text
+                                      _searchFocusNode.unfocus( );
+                                    }
 
-                                    ): null,
-                                  ),
+                                  ): null,
                                 ),
-                                if (!_isSearchExpanded) TextButton(onPressed: _openDrawer, child: Icon(Icons.menu)),
-                              ],
-                            )
-                        ),
+                              ),
+                              if (!_isSearchExpanded) TextButton(onPressed: _openDrawer, child: Icon(Icons.menu)),
+                            ],
+                          )
                       ),
-                    )
+                    ),
                   )
                 )
               ],
