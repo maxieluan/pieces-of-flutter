@@ -44,6 +44,7 @@ class _HomePageState extends State<HomePage> {
   int _selectedIndex = 0;
   FocusNode _searchFocusNode = FocusNode();
   bool _isSearchExpanded = false;
+  late OverlayEntry detectorOverlay;
 
   static List<Widget> screens = <Widget>[];
   GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -81,6 +82,13 @@ class _HomePageState extends State<HomePage> {
     _scaffoldKey.currentState?.openDrawer();
   }
 
+  void _handleTapOutside() {
+    // Unfocus the text field when tapped outside
+    if (_searchFocusNode.hasFocus) {
+      _searchFocusNode.unfocus();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     screens.add(FirstScreen());
@@ -94,29 +102,55 @@ class _HomePageState extends State<HomePage> {
           duration: Duration(milliseconds: 300),
           padding: EdgeInsets.symmetric(horizontal: 16.0),
           decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.vertical(bottom: Radius.circular(16))
+              color: Colors.white,
+              borderRadius: BorderRadius.vertical(bottom: Radius.circular(16))
           ),
           child: SafeArea(
             child: Row(
               children: [
-                GestureDetector(
-                    onTap: _openDrawer,
-                    child: Icon(Icons.menu)
-                ),
-                AnimatedContainer(
+                Expanded(
+                  child: AnimatedContainer(
                     duration: Duration(milliseconds: 300),
                     width: _isSearchExpanded ? MediaQuery.of(context).size.width - 72 : 0,
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 16),
-                      child: TextField(
-                        focusNode: _searchFocusNode,
-                        decoration: InputDecoration(
-                            hintText: "Search",
-                            border: InputBorder.none
+                    child: Focus(
+                      onFocusChange: (hasFocus) {
+                        if (hasFocus) {
+                          _focusNodeListener();
+                        } else {
+                          _removeFocusNodeListener();
+                        }
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(0),
+                        child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0), // Adjust the corner radius as needed
+                              color: Colors.grey[200], // Adjust the background color as needed
+                            ),
+                            child: Stack(
+                              children: [
+                                TextField(
+                                  focusNode: _searchFocusNode,
+                                  decoration: InputDecoration(
+                                    hintText: 'Search',
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.fromLTRB(64.0, 12.0, 12.0, 12.0), // Adjust padding as needed
+                                    suffixIcon: IconButton(
+                                      icon: Icon(Icons.clear),
+                                      onPressed: () {
+                                        // Clear the search text
+                                        _searchFocusNode.unfocus( );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                                TextButton(onPressed: _openDrawer, child: Icon(Icons.menu)),
+                              ],
+                            )
                         ),
                       ),
                     )
+                  )
                 )
               ],
             ),
@@ -164,5 +198,28 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  void _focusNodeListener() {
+    // Add a listener to the GestureDetector when the text field is focused
+    WidgetsBinding.instance?.addPostFrameCallback((_) {
+      detectorOverlay = OverlayEntry(builder: (BuildContext context) {
+        final gestureDetector = GestureDetector(
+          onTap: _handleTapOutside, // Call _handleTapOutside when tapping outside
+          child: Container(
+            color: Colors.transparent,
+            constraints: BoxConstraints.expand(),
+          ),
+        );
+        return gestureDetector;
+      });
+
+      Overlay.of(context)?.insert(detectorOverlay);
+    });
+  }
+
+  void _removeFocusNodeListener() {
+    // Remove the listener when the text field loses focus
+    detectorOverlay.remove();
   }
 }
