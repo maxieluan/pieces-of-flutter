@@ -99,8 +99,8 @@ class _HomePageState extends State<HomePage> {
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(80.0),
         child: AnimatedContainer(
-          duration: Duration(milliseconds: 300),
-          padding: EdgeInsets.symmetric(horizontal: 16.0),
+          duration: Duration(milliseconds: 100),
+          padding: _isSearchExpanded ? EdgeInsets.symmetric(horizontal: 0): EdgeInsets.symmetric(horizontal: 16.0),
           decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(16))
@@ -111,12 +111,17 @@ class _HomePageState extends State<HomePage> {
                 Expanded(
                   child: AnimatedContainer(
                     duration: Duration(milliseconds: 300),
-                    width: _isSearchExpanded ? MediaQuery.of(context).size.width - 72 : 0,
                     child: Focus(
                       onFocusChange: (hasFocus) {
                         if (hasFocus) {
+                          setState(() {
+                            _isSearchExpanded = true;
+                          });
                           _focusNodeListener();
                         } else {
+                          setState(() {
+                            _isSearchExpanded = false;
+                          });
                           _removeFocusNodeListener();
                         }
                       },
@@ -135,16 +140,17 @@ class _HomePageState extends State<HomePage> {
                                     hintText: 'Search',
                                     border: InputBorder.none,
                                     contentPadding: EdgeInsets.fromLTRB(64.0, 12.0, 12.0, 12.0), // Adjust padding as needed
-                                    suffixIcon: IconButton(
+                                    suffixIcon: !_isSearchExpanded? IconButton(
                                       icon: Icon(Icons.clear),
                                       onPressed: () {
                                         // Clear the search text
                                         _searchFocusNode.unfocus( );
-                                      },
-                                    ),
+                                      }
+
+                                    ): null,
                                   ),
                                 ),
-                                TextButton(onPressed: _openDrawer, child: Icon(Icons.menu)),
+                                if (!_isSearchExpanded) TextButton(onPressed: _openDrawer, child: Icon(Icons.menu)),
                               ],
                             )
                         ),
