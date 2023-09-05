@@ -216,8 +216,7 @@ class _HomePageState extends State<HomePage> {
             right: 0,
             bottom: 0,
             child: Scaffold(
-              body: Container(
-                child: Container(
+                body: Container(
                   color: Colors.white, // You can customize the background color
                   child: ListView.builder(
                     itemCount: 10, // Replace with the actual number of items
@@ -230,7 +229,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-            ),
+
           );
 
       });
