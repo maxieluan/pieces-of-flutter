@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 void main() {
+  debugRepaintRainbowEnabled = true;
   runApp(const MyApp());
 }
 
@@ -127,42 +129,44 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                             });
                           }
                         },
-                        child: Padding(
-                          padding: EdgeInsets.fromLTRB(16.0 - 16*controller.value, 16 - 16*controller.value, 16 - 16*controller.value, 16),
-                          child: Container(
-                              height: 64+ 32 *controller.value,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(8.0), // Adjust the corner radius as needed
-                                color: Colors.grey[200], // Adjust the background color as needed
-                              ),
-                              child: Stack(
-                                children: [
-                                  TextField(
-                                    focusNode: _searchFocusNode,
-                                    decoration: InputDecoration(
-                                      hintText: 'Search',
-                                      border: InputBorder.none,
-                                      contentPadding: EdgeInsets.fromLTRB(64.0, 12.0 + 8*controller.value, 12.0, 12.0), // Adjust padding as needed
-                                      suffixIcon: !_isSearchExpanded? IconButton(
-                                          icon: const Icon(Icons.clear),
-                                          onPressed: () {
-                                            // Clear th`e search text
-                                            _searchFocusNode.unfocus( );
-                                          }
+                        child: RepaintBoundary(
+                          child: Padding(
+                            padding: EdgeInsets.fromLTRB(16.0 - 16*controller.value, 16 - 16*controller.value, 16 - 16*controller.value, 16),
+                            child: Container(
+                                height: 64+ 32 *controller.value,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(8.0), // Adjust the corner radius as needed
+                                  color: Colors.grey[200], // Adjust the background color as needed
+                                ),
+                                child: Stack(
+                                  children: [
+                                    TextField(
+                                      focusNode: _searchFocusNode,
+                                      decoration: InputDecoration(
+                                        hintText: 'Search',
+                                        border: InputBorder.none,
+                                        contentPadding: EdgeInsets.fromLTRB(64.0, 12.0 + 8*controller.value, 12.0, 12.0), // Adjust padding as needed
+                                        suffixIcon: !_isSearchExpanded? IconButton(
+                                            icon: const Icon(Icons.clear),
+                                            onPressed: () {
+                                              // Clear th`e search text
+                                              _searchFocusNode.unfocus( );
+                                            }
 
-                                      ): null,
+                                        ): null,
+                                      ),
                                     ),
-                                  ),
 
                                     Positioned(
-                                      top: controller.value * 8,
+                                        top: controller.value * 8,
                                         child:
                                         !_isSearchExpanded?
-                                          TextButton(onPressed: _openDrawer, child: const Icon(Icons.menu)): TextButton(
-                                          onPressed: _unfocusInput, child: const Icon(Icons.arrow_back))
+                                        TextButton(onPressed: _openDrawer, child: const Icon(Icons.menu)): TextButton(
+                                            onPressed: _unfocusInput, child: const Icon(Icons.arrow_back))
                                     )
-                                ],
-                              )
+                                  ],
+                                )
+                            ),
                           ),
                         ),
                       )
@@ -177,17 +181,19 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         child: Stack(
             children: [
               if(!_isSearchExpanded) screens[_selectedIndex],
-              AnimatedOpacity(duration: const Duration(milliseconds: 300),
-                opacity: _isSearchExpanded? 1: 0,
-                child: ListView.builder(
-                  itemCount: 10, // Example number of results
-                  itemBuilder: (context, index) {
-                    return ListTile(
-                      title: Text('Result $index'),
-                      // Add your result item widget here
-                    );
-                  },
-                ),
+              RepaintBoundary(
+                child: AnimatedOpacity(duration: const Duration(milliseconds: 300),
+                  opacity: _isSearchExpanded? 1: 0,
+                  child: ListView.builder(
+                    itemCount: 10, // Example number of results
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text('Result $index'),
+                        // Add your result item widget here
+                      );
+                    },
+                  ),
+                )
               )
             ]
         ),
