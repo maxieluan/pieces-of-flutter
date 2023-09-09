@@ -48,6 +48,7 @@ class FirstScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+      backgroundColor: Colors.green,
         body: Text("First Screen")
     );
   }
@@ -60,6 +61,7 @@ class SecondScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // TODO: implement build
     return const Scaffold(
+      backgroundColor: Colors.blueGrey,
         body: Text("Second Screen")
     );
   }
@@ -201,7 +203,24 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
         body: Center(
           child: Stack(
               children: [
-                if(!_isSearchExpanded) screens[_selectedIndex],
+                AnimatedSwitcher(
+                  duration: Duration(milliseconds: 1000),
+                  child: !_isSearchExpanded? screens[_selectedIndex]: null,
+                  transitionBuilder: (Widget child, Animation<double> animation) {
+                    // Implement your custom transition effect here
+                    const begin = Offset(1.0, 1.0); // Bottom-right corner
+                    const end = Offset.zero;
+                    const curve = Curves.easeInOut;
+
+                    var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+                    var offsetAnimation = animation.drive(tween);
+
+                    return SlideTransition(
+                      position: offsetAnimation,
+                      child: child,
+                    );
+                  },
+                ),
                 RepaintBoundary(
                     child: AnimatedOpacity(duration: const Duration(milliseconds: 300),
                       opacity: _isSearchExpanded? 1: 0,
@@ -218,6 +237,7 @@ class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin
                 )
               ]
           ),
+
         ),
         drawer: ClipRRect(
           borderRadius: const BorderRadius.only(
