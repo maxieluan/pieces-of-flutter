@@ -91,6 +91,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   late AnimationController screenTransition;
   late Animation<double> enlargeAnimation;
   late Animation<double> screenTransitonAnimation;
+  late Corner overlayOriginatingCorner;
 
   static List<Widget> screens = <Widget>[];
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -100,7 +101,13 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     super.initState();
     controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
     enlargeAnimation = Tween<double>(begin: 0, end: 100).animate(controller);
-    screenTransition = AnimationController(vsync: this, duration: const Duration(milliseconds: 500));
+    screenTransition = AnimationController(vsync: this, duration: const Duration(milliseconds: 500))..addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) {
+        setState(() {
+          _showOverlayScreen = false;
+        });
+      }
+    });
     screenTransitonAnimation = Tween<double>(begin: 0, end: 1).animate(screenTransition);
   }
 
@@ -165,8 +172,8 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                     });
                                   } else {
                                     setState(() {
-                                      _isSearchExpanded = false;
                                       controller.reverse();
+                                      _isSearchExpanded = false;
                                     });
                                   }
                                 },
@@ -281,12 +288,10 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                       onTap: () {
                         setState(() {
                           Navigator.pop(context);
+                          overlayOriginatingCorner = Corner.bottomRight;
+                          screenTransition.forward();
+
                           _showOverlayScreen = !_showOverlayScreen;
-                          if (_showOverlayScreen) {
-                            screenTransition.forward();
-                          } else {
-                            screenTransition.reverse();
-                          }
                         });
                       },
                     ),
@@ -332,14 +337,12 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                 bottom: 0,
                 right: 0,
                 child: GestureDetector(
-                  onDoubleTap: () => {
-                    setState(() {
-                      _showOverlayScreen = !_showOverlayScreen;
-                      screenTransition.reverse();
-                    })
+                  onDoubleTap: () {
+                    overlayOriginatingCorner = Corner.topLeft;
+                    screenTransition.reverse();
                   },
                   child: ClipOval(
-                    clipper: ArchClipper(animationValue),
+                    clipper: ArchClipper(animationValue, overlayOriginatingCorner),
                     child: Container(
                       width: MediaQuery.of(context).size.width,
                       height: MediaQuery.of(context).size.height,
@@ -356,15 +359,38 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
   }
 }
 
+enum Corner {
+  bottomLeft,
+  bottomRight,
+  topLeft,
+  topRight
+}
+
 class ArchClipper extends CustomClipper<Rect> {
   double animationValue;
-  ArchClipper(this.animationValue);
+  Corner corner;
+  ArchClipper(this.animationValue, this.corner);
 
   @override
   Rect getClip(Size size) {
     final radius = (size.width + size.height)  * animationValue;
+    Offset center = const Offset(0, 0);
+    switch(corner) {
+      case Corner.bottomRight:
+        center = Offset(size.width, size.height);
+        break;
+      case Corner.bottomLeft:
+        center = Offset(0, size.height);
+        break;
+      case Corner.topRight:
+        center = Offset(size.width, 0);
+        break;
+      default:
+        break;
+    }
+
     return Rect.fromCircle(
-      center: Offset(size.width, size.height),
+      center: center,
       radius: radius,
     );
   }
