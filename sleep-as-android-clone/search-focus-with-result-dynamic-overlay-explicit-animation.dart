@@ -1,187 +1,188 @@
-  import 'package:flutter/foundation.dart';
-  import 'package:flutter/material.dart';
-  import 'package:flutter/rendering.dart';
-  
-  void main() {
-    debugRepaintRainbowEnabled = false;
-    runApp(const MyApp());
-  }
-  
-  class MyApp extends StatelessWidget {
-    const MyApp({super.key});
-  
-    @override
-    Widget build(BuildContext context) {
-      return MaterialApp(
-          theme: ThemeData(
-              colorScheme: ColorScheme(
-                  primary: Colors.orange,
-                  primaryContainer: Colors.orange[700],
-                  secondary: Colors.green,
-                  secondaryContainer: Colors.green[700],
-                  brightness: Brightness.light,
-                  onPrimary: Colors.white,
-                  onSecondary: Colors.black,
-                  onSurface: Colors.black,
-                  onError: Colors.white,
-                  error: Colors.red,
-                  background: Colors.grey[200]!,
-                  surface: Colors.white,
-                  onBackground: Colors.black
-              )
-          ),
-          title: "My App",
-          home: const HomePage()
-      );
-    }
-  }
-  
-  class HomePage extends StatefulWidget{
-    const HomePage({super.key});
-  
-    @override
-    State<HomePage> createState() => _HomePageState();
-  }
-  
-  class FirstScreen extends StatelessWidget {
-    const FirstScreen({super.key});
-  
-    @override
-    Widget build(BuildContext context) {
-      return Scaffold(
-          backgroundColor: Colors.green,
-          body: ListView(
-            children: [
-              _buildListItem("Item 1"),
-              _buildListItem("Item 2"),
-              _buildListItem("Item 3"),
-              _buildListItem("Item 4"),
-              _buildListItem("Item 5"),
-              _buildListItem("Item 6"),
-              _buildListItem("Item 7"),
-              _buildListItem("Item 8"),
-              _buildListItem("Item 9")
-            ],
-          )
-      );
-    }
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
-    Widget _buildListItem(String itemText) {
-      return InkWell(
+void main() {
+  debugRepaintRainbowEnabled = false;
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+        theme: ThemeData(
+            colorScheme: ColorScheme(
+                primary: Colors.orange,
+                primaryContainer: Colors.orange[700],
+                secondary: Colors.green,
+                secondaryContainer: Colors.green[700],
+                brightness: Brightness.light,
+                onPrimary: Colors.white,
+                onSecondary: Colors.black,
+                onSurface: Colors.black,
+                onError: Colors.white,
+                error: Colors.red,
+                background: Colors.grey[200]!,
+                surface: Colors.white,
+                onBackground: Colors.black
+            )
+        ),
+        title: "My App",
+        home: const HomePage()
+    );
+  }
+}
+
+class HomePage extends StatefulWidget{
+  const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class FirstScreen extends StatelessWidget {
+  const FirstScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        backgroundColor: Colors.green,
+        body: ListView(
+          children: [
+            _buildListItem("Item 1"),
+            _buildListItem("Item 2"),
+            _buildListItem("Item 3"),
+            _buildListItem("Item 4"),
+            _buildListItem("Item 5"),
+            _buildListItem("Item 6"),
+            _buildListItem("Item 7"),
+            _buildListItem("Item 8"),
+            _buildListItem("Item 9")
+          ],
+        )
+    );
+  }
+
+  Widget _buildListItem(String itemText) {
+    return Card(
+      elevation: 4, // You can adjust the elevation as needed
+      margin: EdgeInsets.all(8), // Margin around each card
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16.0), // Adjust the corner radius as needed
+      ),
+      child: InkWell(
+        customBorder: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0)
+        ),
         onTap: () {
-          // Handle the click action for the item here
-          print("test");
           _handleItemClick(itemText);
         },
-        child: Card(
-          elevation: 4, // You can adjust the elevation as needed
-          margin: EdgeInsets.all(8), // Margin around each card
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16.0), // Adjust the corner radius as needed
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(32.0), // Padding inside the card
-            child: Text(
-              itemText,
-              style: TextStyle(fontSize: 20), // Customize the text style
-            ),
+        child: Padding(
+          padding: const EdgeInsets.all(32.0), // Padding inside the card
+          child: Text(
+            itemText,
+            style: TextStyle(fontSize: 20), // Customize the text style
           ),
         ),
-      );
-    }
+      ),
+    );
+  }
 
-    void _handleItemClick(String itemText) {
-      // Handle the click action for the item here
-      print('Clicked on: $itemText');
-    }
+  void _handleItemClick(String itemText) {
+    // Handle the click action for the item here
+    print('Clicked on: $itemText');
   }
-  
-  class SecondScreen extends StatelessWidget {
-    const SecondScreen({super.key});
-  
-    @override
-    Widget build(BuildContext context) {
-      // TODO: implement build
-      return const Scaffold(
-          backgroundColor: Colors.blueGrey,
-          body: Text("Second Screen")
-      );
-    }
+}
+
+class SecondScreen extends StatelessWidget {
+  const SecondScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return const Scaffold(
+        backgroundColor: Colors.blueGrey,
+        body: Text("Second Screen")
+    );
   }
-  
-  class OverlayScreen extends StatelessWidget {
-    const OverlayScreen({super.key});
-  
-    @override
-    Widget build(BuildContext context) {
-      // TODO: implement build
-      return const Scaffold(
-          backgroundColor: Colors.amber,
-          body: Text("Overlay Screen")
-      );
-    }
+}
+
+class OverlayScreen extends StatelessWidget {
+  const OverlayScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return const Scaffold(
+        backgroundColor: Colors.amber,
+        body: Text("Overlay Screen")
+    );
   }
-  
-  class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-    int _selectedIndex = 0;
-    final FocusNode _searchFocusNode = FocusNode();
-    bool _isSearchExpanded = false;
-    bool _resultFadeIn = false;
-    bool _showOverlayScreen = false;
-    late OverlayEntry detectorOverlay;
-    late AnimationController controller;
-    late AnimationController screenTransition;
-    late Animation<double> enlargeAnimation;
-    late Animation<double> screenTransitonAnimation;
-    late Corner overlayOriginatingCorner;
-  
-    static List<Widget> screens = <Widget>[];
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  
-    @override
-    void initState() {
-      super.initState();
-      controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
-      enlargeAnimation = Tween<double>(begin: 0, end: 100).animate(controller);
-      screenTransition = AnimationController(vsync: this, duration: const Duration(milliseconds: 500))..addStatusListener((status) {
-        if (status == AnimationStatus.dismissed) {
-          setState(() {
-            _showOverlayScreen = false;
-          });
-        }
-      });
-      screenTransitonAnimation = Tween<double>(begin: 0, end: 1).animate(screenTransition);
-    }
-  
-    @override
-    void dispose() {
-      _searchFocusNode.dispose();
-      super.dispose();
-    }
-  
-    void _onItemTapped(int index) {
-      setState(() {
-        _selectedIndex = index;
-      });
-    }
-  
-    void _openDrawer() {
-      _scaffoldKey.currentState?.openDrawer();
-    }
-  
-    void _unfocusInput() {
-      // Unfocus the text field when tapped outside
-      if (_searchFocusNode.hasFocus) {
-        _searchFocusNode.unfocus();
+}
+
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  int _selectedIndex = 0;
+  final FocusNode _searchFocusNode = FocusNode();
+  bool _isSearchExpanded = false;
+  bool _resultFadeIn = false;
+  bool _showOverlayScreen = false;
+  late OverlayEntry detectorOverlay;
+  late AnimationController controller;
+  late AnimationController screenTransition;
+  late Animation<double> enlargeAnimation;
+  late Animation<double> screenTransitonAnimation;
+  late Corner overlayOriginatingCorner;
+
+  static List<Widget> screens = <Widget>[];
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(vsync: this, duration: const Duration(milliseconds: 300));
+    enlargeAnimation = Tween<double>(begin: 0, end: 100).animate(controller);
+    screenTransition = AnimationController(vsync: this, duration: const Duration(milliseconds: 500))..addStatusListener((status) {
+      if (status == AnimationStatus.dismissed) {
+        setState(() {
+          _showOverlayScreen = false;
+        });
       }
+    });
+    screenTransitonAnimation = Tween<double>(begin: 0, end: 1).animate(screenTransition);
+  }
+
+  @override
+  void dispose() {
+    _searchFocusNode.dispose();
+    super.dispose();
+  }
+
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+  }
+
+  void _openDrawer() {
+    _scaffoldKey.currentState?.openDrawer();
+  }
+
+  void _unfocusInput() {
+    // Unfocus the text field when tapped outside
+    if (_searchFocusNode.hasFocus) {
+      _searchFocusNode.unfocus();
     }
-  
-    @override
-    Widget build(BuildContext context) {
-      screens.add(const FirstScreen());
-      screens.add(const SecondScreen());
-  
-      return Stack(
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    screens.add(const FirstScreen());
+    screens.add(const SecondScreen());
+
+    return Stack(
         children: [
           Scaffold(
               key: _scaffoldKey,
@@ -211,13 +212,11 @@
                                       setState(() {
                                         controller.reverse();
                                         _resultFadeIn = false;
+
+                                        _isSearchExpanded = false;
                                       });
 
-                                      Future.delayed(Duration(milliseconds: 300), (){
-                                        setState(() {
-                                          _isSearchExpanded = false;
-                                        });
-                                      });
+
                                     }
                                   },
                                   child: RepaintBoundary(
@@ -243,11 +242,11 @@
                                                         // Clear th`e search text
                                                         _searchFocusNode.unfocus( );
                                                       }
-  
+
                                                   ): null,
                                                 ),
                                               ),
-  
+
                                               Positioned(
                                                   top: controller.value * 8,
                                                   child:
@@ -279,10 +278,10 @@
                           const begin = Offset(1.0, 1.0); // Bottom-right corner
                           const end = Offset.zero;
                           const curve = Curves.easeInOut;
-  
+
                           var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
                           var offsetAnimation = animation.drive(tween);
-  
+
                           return SlideTransition(
                             position: offsetAnimation,
                             child: child,
@@ -291,24 +290,24 @@
                       ),
                       if (_isSearchExpanded)
                         RepaintBoundary(
-                          child: AnimatedOpacity(duration: const Duration(milliseconds: 300),
-                            opacity: _resultFadeIn? 1: 0,
+                            child: AnimatedOpacity(duration: const Duration(milliseconds: 300),
+                              opacity: _resultFadeIn? 1: 0,
 
-                            child: ListView.builder(
-                              itemCount: 10, // Example number of results
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                  title: Text('Result $index'),
-                                  // Add your result item widget here
-                                );
-                              },
-                            ),
-                          )
-                      )
+                              child: ListView.builder(
+                                itemCount: 10, // Example number of results
+                                itemBuilder: (context, index) {
+                                  return ListTile(
+                                    title: Text('Result $index'),
+                                    // Add your result item widget here
+                                  );
+                                },
+                              ),
+                            )
+                        )
 
                     ]
                 ),
-  
+
               ),
               drawer: ClipRRect(
                 borderRadius: const BorderRadius.only(
@@ -336,7 +335,7 @@
                             Navigator.pop(context);
                             overlayOriginatingCorner = Corner.bottomRight;
                             screenTransition.forward();
-  
+
                             _showOverlayScreen = !_showOverlayScreen;
                           });
                         },
@@ -379,70 +378,70 @@
                 final animationValue = screenTransitonAnimation.value;
                 final safePadding = MediaQuery.of(context).padding.top;
                 return Positioned(
-                  top: safePadding,
-                  bottom: 0,
-                  right: 0,
-                  child: GestureDetector(
-                    onDoubleTap: () {
-                      overlayOriginatingCorner = Corner.topLeft;
-                      screenTransition.reverse();
-                    },
-                    child: ClipOval(
-                      clipper: ArchClipper(animationValue, overlayOriginatingCorner),
-                      child: Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height,
-                        color: Colors.white, // Background color of the overlay
-                        child: const OverlayScreen(),
-                      ),
+                    top: safePadding,
+                    bottom: 0,
+                    right: 0,
+                    child: GestureDetector(
+                        onDoubleTap: () {
+                          overlayOriginatingCorner = Corner.topLeft;
+                          screenTransition.reverse();
+                        },
+                        child: ClipOval(
+                          clipper: ArchClipper(animationValue, overlayOriginatingCorner),
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height,
+                            color: Colors.white, // Background color of the overlay
+                            child: const OverlayScreen(),
+                          ),
+                        )
                     )
-                  )
-               );
-             },
+                );
+              },
             )
         ]
-      );
-    }
+    );
   }
-  
-  enum Corner {
-    bottomLeft,
-    bottomRight,
-    topLeft,
-    topRight
-  }
-  
-  class ArchClipper extends CustomClipper<Rect> {
-    double animationValue;
-    Corner corner;
-    ArchClipper(this.animationValue, this.corner);
-  
-    @override
-    Rect getClip(Size size) {
-      final radius = (size.width + size.height)  * animationValue;
-      Offset center = const Offset(0, 0);
-      switch(corner) {
-        case Corner.bottomRight:
-          center = Offset(size.width, size.height);
-          break;
-        case Corner.bottomLeft:
-          center = Offset(0, size.height);
-          break;
-        case Corner.topRight:
-          center = Offset(size.width, 0);
-          break;
-        default:
-          break;
-      }
-  
-      return Rect.fromCircle(
-        center: center,
-        radius: radius,
-      );
+}
+
+enum Corner {
+  bottomLeft,
+  bottomRight,
+  topLeft,
+  topRight
+}
+
+class ArchClipper extends CustomClipper<Rect> {
+  double animationValue;
+  Corner corner;
+  ArchClipper(this.animationValue, this.corner);
+
+  @override
+  Rect getClip(Size size) {
+    final radius = (size.width + size.height)  * animationValue;
+    Offset center = const Offset(0, 0);
+    switch(corner) {
+      case Corner.bottomRight:
+        center = Offset(size.width, size.height);
+        break;
+      case Corner.bottomLeft:
+        center = Offset(0, size.height);
+        break;
+      case Corner.topRight:
+        center = Offset(size.width, 0);
+        break;
+      default:
+        break;
     }
-  
-    @override
-    bool shouldReclip(covariant CustomClipper<Rect> oldClipper) {
-      return true;
-    }
+
+    return Rect.fromCircle(
+      center: center,
+      radius: radius,
+    );
   }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Rect> oldClipper) {
+    return true;
+  }
+}
