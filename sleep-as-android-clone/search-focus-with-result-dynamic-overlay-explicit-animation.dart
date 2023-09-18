@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -68,8 +67,8 @@ class FirstScreen extends StatelessWidget {
 
   Widget _buildListItem(String itemText) {
     return Card(
-      elevation: 4, // You can adjust the elevation as needed
-      margin: EdgeInsets.all(8), // Margin around each card
+      elevation: 1, // You can adjust the elevation as needed
+      margin: const EdgeInsets.all(8), // Margin around each card
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16.0), // Adjust the corner radius as needed
       ),
@@ -84,7 +83,7 @@ class FirstScreen extends StatelessWidget {
           padding: const EdgeInsets.all(32.0), // Padding inside the card
           child: Text(
             itemText,
-            style: TextStyle(fontSize: 20), // Customize the text style
+            style: const TextStyle(fontSize: 20), // Customize the text style
           ),
         ),
       ),
@@ -202,8 +201,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                                         _isSearchExpanded = true;
                                         controller.forward();
                                       });
-
-                                      Future.delayed(Duration(milliseconds: 10), (){
+                                      Future.delayed(const Duration(milliseconds: 10), (){
                                         setState(() {
                                           _resultFadeIn = true;
                                         });
@@ -215,8 +213,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
                                         _isSearchExpanded = false;
                                       });
-
-
                                     }
                                   },
                                   child: RepaintBoundary(
@@ -272,21 +268,16 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     children: [
                       AnimatedSwitcher(
                         duration: const Duration(milliseconds: 1000),
-                        child: !_isSearchExpanded? screens[_selectedIndex]: null,
-                        transitionBuilder: (Widget child, Animation<double> animation) {
-                          // Implement your custom transition effect here
-                          const begin = Offset(1.0, 1.0); // Bottom-right corner
-                          const end = Offset.zero;
-                          const curve = Curves.easeInOut;
-
-                          var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                          var offsetAnimation = animation.drive(tween);
-
-                          return SlideTransition(
-                            position: offsetAnimation,
+                        switchInCurve: Curves.easeInOut,
+                        switchOutCurve: Curves.bounceInOut,
+                        transitionBuilder: (child, animation) {
+                          return FadeTransition(
+                            opacity: animation,
                             child: child,
                           );
                         },
+                        child:
+                          !_isSearchExpanded? screens[_selectedIndex]: null,
                       ),
                       if (_isSearchExpanded)
                         RepaintBoundary(
