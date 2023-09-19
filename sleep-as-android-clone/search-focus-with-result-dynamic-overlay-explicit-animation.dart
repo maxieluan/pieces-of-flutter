@@ -51,21 +51,54 @@ class FirstScreen extends StatelessWidget {
         backgroundColor: Colors.green,
         body: ListView(
           children: [
-            _buildListItem("Item 1"),
-            _buildListItem("Item 2"),
-            _buildListItem("Item 3"),
-            _buildListItem("Item 4"),
-            _buildListItem("Item 5"),
-            _buildListItem("Item 6"),
-            _buildListItem("Item 7"),
-            _buildListItem("Item 8"),
-            _buildListItem("Item 9")
+            _buildListItem(Text("Item 1"), 1),
+            _buildListItem(Text("Item 2"), 2),
+            _buildListItem(Text("Item 2"), 3),
+            _buildListItem(
+               Row(
+                children: [
+                  const Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Header",
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold
+                          )
+                        ),
+                        SizedBox(
+                          height: 14,
+                        ),
+                        Text(
+                          'Lorem ipsum dolor sit amet.'
+                              'Sed do eiusmod tempor incididunt ut.',
+                          style: TextStyle(fontSize: 16)
+                        )
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 140,
+                    height: 140,
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 8, 0, 8),
+                      child: Image.asset("assets/images/brain.png", fit: BoxFit.fill)
+                    ),
+                  )
+                ],
+              )
+            , 4),
+            _buildListItem(
+
+            , 5)
           ],
         )
     );
   }
 
-  Widget _buildListItem(String itemText) {
+  Widget _buildListItem(Widget widget, int index) {
     return Card(
       elevation: 1, // You can adjust the elevation as needed
       margin: const EdgeInsets.all(8), // Margin around each card
@@ -77,20 +110,17 @@ class FirstScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.0)
         ),
         onTap: () {
-          _handleItemClick(itemText);
+          _handleItemClick(index);
         },
         child: Padding(
           padding: const EdgeInsets.all(32.0), // Padding inside the card
-          child: Text(
-            itemText,
-            style: const TextStyle(fontSize: 20), // Customize the text style
-          ),
+          child: widget
         ),
       ),
     );
   }
 
-  void _handleItemClick(String itemText) {
+  void _handleItemClick(int itemText) {
     // Handle the click action for the item here
     print('Clicked on: $itemText');
   }
