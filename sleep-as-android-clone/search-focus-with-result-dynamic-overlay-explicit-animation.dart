@@ -533,15 +533,18 @@ class _CustomMeterGraphState  extends State<CustomMeterGraph> with SingleTickerP
         AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
-              return SizedBox(
-                width: 170, // slightly wider for the width of the stroke
-                height: 150,
-                child: ClipRect(
-                  clipper: UpperHalfClipper(),
-                  child: CustomPaint(
-                    painter: MeterPainter(_animation.value, Colors.green),
-                  ),
-                )
+              return Padding(
+                padding: EdgeInsets.only(top: 40),
+                child: SizedBox(
+                  width: 170, // slightly wider for the width of the stroke
+                  height: 150,
+                  child: ClipRect(
+                    clipper: UpperHalfClipper(),
+                    child: CustomPaint(
+                      painter: MeterPainter(_animation.value, Colors.green),
+                    ),
+                  )
+                ),
               );
             }
         )
@@ -572,9 +575,9 @@ class MeterPainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     double centerX = size.width/2;
     double centerY = size.height/2;
-    double radius = min(centerX, centerY);
 
     double strokeWidth = 12.0;
+    double radius = min(centerX, centerY) - strokeWidth;
     double startAngle = -pi;
     double sweepAngle = pi * value * 2;
 
