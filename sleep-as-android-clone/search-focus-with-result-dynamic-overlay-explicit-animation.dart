@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -43,7 +45,8 @@ class HomePage extends StatefulWidget{
 }
 
 class FirstScreen extends StatelessWidget {
-  const FirstScreen({super.key});
+  FirstScreen({super.key});
+  GlobalKey<_CustomMeterGraphState> meterGraphKey = GlobalKey<_CustomMeterGraphState>();
 
   @override
   Widget build(BuildContext context) {
@@ -90,9 +93,23 @@ class FirstScreen extends StatelessWidget {
                 ],
               )
             , 4),
-            _buildListItem(
+            Card(
+              elevation: 1, // You can adjust the elevation as needed
+              margin: const EdgeInsets.all(8), // Margin around each card
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16.0), // Adjust the corner radius as needed
+              ),
+              child: InkWell(
+                customBorder: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16.0)
+                ),
+                onTap: () {
+                  meterGraphKey.currentState?.resetAnimation();
+                },
+                child:  CustomMeterGraph(key: meterGraphKey, value: 0.7)
 
-            , 5)
+              ),
+            )
           ],
         )
     );
@@ -208,7 +225,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    screens.add(const FirstScreen());
+    screens.add(FirstScreen());
     screens.add(const SecondScreen());
 
     return Stack(
@@ -463,6 +480,114 @@ class ArchClipper extends CustomClipper<Rect> {
 
   @override
   bool shouldReclip(covariant CustomClipper<Rect> oldClipper) {
+    return true;
+  }
+}
+
+class CustomMeterGraph extends StatefulWidget {
+  double value;
+
+  CustomMeterGraph({super.key, required this.value});
+
+  @override
+  _CustomMeterGraphState  createState() => _CustomMeterGraphState(value);
+}
+
+class _CustomMeterGraphState  extends State<CustomMeterGraph> with SingleTickerProviderStateMixin {
+
+  late AnimationController _controller;
+  late Animation<double> _animation;
+  double value;
+
+  _CustomMeterGraphState(this.value);
+
+  void resetAnimation() {
+    setState(() {
+      _controller.reset();
+      _controller.forward();
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _controller = AnimationController(vsync: this,
+      duration: const Duration(milliseconds: 500)
+    );
+
+    _animation = Tween<double>(
+      begin: 0,
+      end: value,
+    ).animate(_controller);
+
+    _controller.forward();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return SizedBox(
+                width: 170, // slightly wider for the width of the stroke
+                height: 150,
+                child: ClipRect(
+                  clipper: UpperHalfClipper(),
+                  child: CustomPaint(
+                    painter: MeterPainter(_animation.value, Colors.green),
+                  ),
+                )
+              );
+            }
+        )
+      ],
+    );
+  }
+}
+
+class UpperHalfClipper extends CustomClipper<Rect> {
+  @override
+  Rect getClip(Size size) {
+    return Rect.fromLTRB(0, 0, size.width, size.height / 2);
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Rect> oldClipper) {
+    return false;
+  }
+}
+
+class MeterPainter extends CustomPainter {
+  double value;
+  Color color;
+
+  MeterPainter(this.value, this.color);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    double centerX = size.width/2;
+    double centerY = size.height/2;
+    double radius = min(centerX, centerY);
+
+    double strokeWidth = 12.0;
+    double startAngle = -pi;
+    double sweepAngle = pi * value * 2;
+
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = strokeWidth;
+    
+      canvas.drawArc(Rect.fromCircle(center: Offset(centerX, centerY), radius: radius), startAngle, sweepAngle, false, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
     return true;
   }
 }
