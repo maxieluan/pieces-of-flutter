@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -46,7 +47,7 @@ class HomePage extends StatefulWidget{
 
 class FirstScreen extends StatelessWidget {
   FirstScreen({super.key});
-  GlobalKey<_CustomMeterGraphState> meterGraphKey = GlobalKey<_CustomMeterGraphState>();
+  final GlobalKey<CustomMeterGraphState> meterGraphKey = GlobalKey<CustomMeterGraphState>();
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +55,9 @@ class FirstScreen extends StatelessWidget {
         backgroundColor: Colors.green,
         body: ListView(
           children: [
-            _buildListItem(Text("Item 1"), 1),
-            _buildListItem(Text("Item 2"), 2),
-            _buildListItem(Text("Item 2"), 3),
+            _buildListItem(const Text("Item 1"), 1),
+            _buildListItem(const Text("Item 2"), 2),
+            _buildListItem(const Text("Item 2"), 3),
             _buildListItem(
                Row(
                 children: [
@@ -139,7 +140,9 @@ class FirstScreen extends StatelessWidget {
 
   void _handleItemClick(int itemText) {
     // Handle the click action for the item here
-    print('Clicked on: $itemText');
+    if (kDebugMode) {
+      print('Clicked on: $itemText');
+    }
   }
 }
 
@@ -485,21 +488,19 @@ class ArchClipper extends CustomClipper<Rect> {
 }
 
 class CustomMeterGraph extends StatefulWidget {
-  double value;
+  final double value;
 
-  CustomMeterGraph({super.key, required this.value});
+  const CustomMeterGraph({super.key, required this.value});
 
   @override
-  _CustomMeterGraphState  createState() => _CustomMeterGraphState(value);
+  State<CustomMeterGraph>  createState() => CustomMeterGraphState();
 }
 
-class _CustomMeterGraphState  extends State<CustomMeterGraph> with SingleTickerProviderStateMixin {
+class CustomMeterGraphState  extends State<CustomMeterGraph> with SingleTickerProviderStateMixin {
 
   late AnimationController _controller;
   late Animation<double> _animation;
-  double value;
-
-  _CustomMeterGraphState(this.value);
+  late double value;
 
   void resetAnimation() {
     setState(() {
@@ -512,6 +513,8 @@ class _CustomMeterGraphState  extends State<CustomMeterGraph> with SingleTickerP
   void initState() {
     // TODO: implement initState
     super.initState();
+    value = widget.value;
+
     _controller = AnimationController(vsync: this,
       duration: const Duration(milliseconds: 500)
     );
@@ -527,21 +530,40 @@ class _CustomMeterGraphState  extends State<CustomMeterGraph> with SingleTickerP
   @override
   Widget build(BuildContext context) {
     // TODO: implement build
-    return Column(
+    return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
               return Padding(
-                padding: EdgeInsets.only(top: 40),
+                padding: const EdgeInsets.only(top: 40),
                 child: SizedBox(
-                  width: 170, // slightly wider for the width of the stroke
-                  height: 150,
+                  width: 120, // slightly wider for the width of the stroke
+                  height: 120,
                   child: ClipRect(
                     clipper: UpperHalfClipper(),
                     child: CustomPaint(
                       painter: MeterPainter(_animation.value, Colors.green),
+                    ),
+                  )
+                ),
+              );
+            }
+        ),
+        const SizedBox(width: 40),
+        AnimatedBuilder(
+            animation: _controller,
+            builder: (context, child) {
+              return Padding(
+                padding: const EdgeInsets.only(top: 40),
+                child: SizedBox(
+                  width: 120, // slightly wider for the width of the stroke
+                  height: 120,
+                  child: ClipRect(
+                    clipper: UpperHalfClipper(),
+                    child: CustomPaint(
+                      painter: MeterPainter(_animation.value, Colors.blue),
                     ),
                   )
                 ),
