@@ -500,7 +500,7 @@ class CustomMeterGraphState  extends State<CustomMeterGraph> with SingleTickerPr
 
   late AnimationController _controller;
   late Animation<double> _animation;
-  late double value;
+  late          double value;
 
   void resetAnimation() {
     setState(() {
@@ -578,7 +578,7 @@ class CustomMeterGraphState  extends State<CustomMeterGraph> with SingleTickerPr
 class UpperHalfClipper extends CustomClipper<Rect> {
   @override
   Rect getClip(Size size) {
-    return Rect.fromLTRB(0, 0, size.width, size.height / 2);
+    return Rect.fromLTRB(0, 0, size.width, size.height / 1.5);
   }
 
   @override
@@ -600,8 +600,8 @@ class MeterPainter extends CustomPainter {
 
     double strokeWidth = 12.0;
     double radius = min(centerX, centerY) - strokeWidth;
-    double startAngle = -pi;
-    double sweepAngle = pi * value * 2;
+    double startAngle = -pi * 1.2;
+    double sweepAngle = pi * value * 2.4;
 
     final paint = Paint()
       ..color = color
