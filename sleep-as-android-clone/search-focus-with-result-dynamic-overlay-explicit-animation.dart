@@ -107,7 +107,7 @@ class FirstScreen extends StatelessWidget {
                 onTap: () {
                   meterGraphKey.currentState?.resetAnimation();
                 },
-                child:  CustomMeterGraph(key: meterGraphKey, value: 0.7)
+                child:  CustomMeterGraph(key: meterGraphKey, value: 1)
 
               ),
             )
@@ -578,7 +578,7 @@ class CustomMeterGraphState  extends State<CustomMeterGraph> with SingleTickerPr
 class UpperHalfClipper extends CustomClipper<Rect> {
   @override
   Rect getClip(Size size) {
-    return Rect.fromLTRB(0, 0, size.width, size.height / 1.5);
+    return Rect.fromLTRB(0, 0, size.width, size.height / 1);
   }
 
   @override
@@ -600,12 +600,13 @@ class MeterPainter extends CustomPainter {
 
     double strokeWidth = 12.0;
     double radius = min(centerX, centerY) - strokeWidth;
-    double startAngle = -pi * 1.2;
-    double sweepAngle = pi * value * 2.4;
+    double startAngle = -pi * 1.1;
+    double sweepAngle = pi * value * 1.2;
 
     final paint = Paint()
       ..color = color
       ..style = PaintingStyle.stroke
+      ..strokeCap = StrokeCap.round
       ..strokeWidth = strokeWidth;
     
       canvas.drawArc(Rect.fromCircle(center: Offset(centerX, centerY), radius: radius), startAngle, sweepAngle, false, paint);
