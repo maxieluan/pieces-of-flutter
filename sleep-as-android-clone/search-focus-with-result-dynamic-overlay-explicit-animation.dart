@@ -533,26 +533,37 @@ class CustomMeterGraphState  extends State<CustomMeterGraph> with SingleTickerPr
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        AnimatedBuilder(
+        Expanded(
+          child: AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
               return Padding(
                 padding: const EdgeInsets.only(top: 40),
-                child: SizedBox(
-                  width: 120, // slightly wider for the width of the stroke
-                  height: 120,
-                  child: ClipRect(
-                    clipper: UpperHalfClipper(),
-                    child: CustomPaint(
-                      painter: MeterPainter(_animation.value, Colors.green),
+                child: Stack(
+                  children: [
+                    Center(
+                      child: SizedBox(
+                        width: 120, // slightly wider for the width of the stroke
+                        height: 120,
+                        child: ClipRect(
+                          clipper: UpperHalfClipper(),
+                          child: CustomPaint(
+                            painter: MeterPainter(_animation.value, Colors.green),
+                          ),
+                        )
+                      ),
                     ),
-                  )
-                ),
+                    Center(
+                      child: Text("text"),
+                    )
+                  ],
+                )
               );
             }
+          ),
         ),
-        const SizedBox(width: 40),
-        AnimatedBuilder(
+        Expanded(
+          child: AnimatedBuilder(
             animation: _controller,
             builder: (context, child) {
               return Padding(
@@ -569,6 +580,7 @@ class CustomMeterGraphState  extends State<CustomMeterGraph> with SingleTickerPr
                 ),
               );
             }
+          ),
         )
       ],
     );

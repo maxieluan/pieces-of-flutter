@@ -112,7 +112,7 @@ class _FloatingButtonPageState extends State<FloatingButtonPage> with SingleTick
   }
 
   Widget _buildSecondaryButton(IconData iconData, double bottom) {
-    return AnimatedBuilder(animation: _animationController, builder: (BuildContext context, Widget? child)
+    return AnimatedBuilder(animation: _animations, builder: (BuildContext context, Widget? child)
     {
       print(_isVisible);
       return Positioned(
