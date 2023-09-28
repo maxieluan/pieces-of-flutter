@@ -531,7 +531,7 @@ class CustomMeterGraphState  extends State<CustomMeterGraph> with SingleTickerPr
   Widget build(BuildContext context) {
     // TODO: implement build
     return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Expanded(
           child: AnimatedBuilder(
@@ -553,8 +553,18 @@ class CustomMeterGraphState  extends State<CustomMeterGraph> with SingleTickerPr
                         )
                       ),
                     ),
-                    Center(
-                      child: Text("text"),
+                    const Center(
+                      child: Padding(padding: EdgeInsets.only(top: 50),
+                        child: Wrap(
+                          direction: Axis.vertical,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+
+                          children: [
+                            Text("test"),
+                            Text("digits")
+                          ]
+                        ),
+                      )
                     )
                   ],
                 )
@@ -568,16 +578,35 @@ class CustomMeterGraphState  extends State<CustomMeterGraph> with SingleTickerPr
             builder: (context, child) {
               return Padding(
                 padding: const EdgeInsets.only(top: 40),
-                child: SizedBox(
-                  width: 120, // slightly wider for the width of the stroke
-                  height: 120,
-                  child: ClipRect(
-                    clipper: UpperHalfClipper(),
-                    child: CustomPaint(
-                      painter: MeterPainter(_animation.value, Colors.blue),
+                child: Stack(
+                  children: [
+                    Center(
+                      child: SizedBox(
+                        width: 120, // slightly wider for the width of the stroke
+                        height: 120,
+                        child: ClipRect(
+                          clipper: UpperHalfClipper(),
+                          child: CustomPaint(
+                            painter: MeterPainter(_animation.value, Colors.blue),
+                          ),
+                        )
+                      ),
                     ),
-                  )
-                ),
+                    const Center(
+                      child: Padding(padding: EdgeInsets.only(top: 50),
+                        child: Wrap(
+                          direction: Axis.vertical,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+
+                          children: [
+                            Text("test"),
+                            Text("digits")
+                          ]
+                        ),
+                      )
+                    )
+                  ],
+                )
               );
             }
           ),
